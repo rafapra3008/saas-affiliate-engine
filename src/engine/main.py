@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 from .config import get_env
 from .collector import get_sample_saas_tools, collect_saas_from_seed_urls, SaaSTool
@@ -17,16 +17,34 @@ def _slugify(text: str) -> str:
     return text.strip("-") or "tool"
 
 
-def build_index_html(tools: List[SaaSTool], out_root: str = "docs", second_lang_code: str = "it") -> Path:
+LANG_CONFIG: List[Tuple[str, str, str]] = [
+    ("en", "English", "docs"),
+    ("it", "Italiano", "docs/it"),
+    ("pt", "Português", "docs/pt"),
+]
+
+
+def build_index_html(tools: List[SaaSTool], out_root: str = "docs") -> Path:
     root = Path(out_root)
     root.mkdir(parents=True, exist_ok=True)
 
-    items_en = []
-    items_it = []
-    for tool in tools:
-        slug = _slugify(tool.name)
-        items_en.append(f'<li><a href="{slug}/">{tool.name} (EN)</a></li>')
-        items_it.append(f'<li><a href="{second_lang_code}/{slug}/">{tool.name} ({second_lang_code.upper()})</a></li>')
+    sections = []
+    for code, label, prefix_root in LANG_CONFIG:
+        # calcola prefisso URL rispetto a docs/
+        if prefix_root == "docs":
+            prefix = ""
+        else:
+            # es. "docs/it" -> "it"
+            prefix = prefix_root.split("/", 1)[1]
+
+        items = []
+        for tool in tools:
+            slug = _slugify(tool.name)
+            path = f"{slug}/" if not prefix else f"{prefix}/{slug}/"
+            items.append(f'<li><a href="{path}">{tool.name} ({code.upper()})</a></li>')
+
+        section_html = f"<h2>{label}</h2><ul>{''.join(items)}</ul>"
+        sections.append(section_html)
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -40,15 +58,7 @@ def build_index_html(tools: List[SaaSTool], out_root: str = "docs", second_lang_
   <h1>SaaS Affiliate Engine</h1>
   <p>Auto-generated pages for SaaS tools.</p>
 
-  <h2>English</h2>
-  <ul>
-    {''.join(items_en)}
-  </ul>
-
-  <h2>Italiano</h2>
-  <ul>
-    {''.join(items_it)}
-  </ul>
+  {''.join(sections)}
 </body>
 </html>
 """
@@ -75,24 +85,24 @@ def main():
         print(f"\n=== TOOL {idx}/{len(web_tools)} ===")
         print(f"- {tool.name} | lang={tool.main_language} | url={tool.homepage}")
 
-        # EN
-        print("[GEN][EN] Generazione pagina EN...")
-        page_en = generate_saas_page(tool, language="en")
-        print("[WRITE][EN] Salvataggio markdown EN...")
-        md_en = write_markdown_page(tool, page_en, out_dir="content_en", page_language="en")
-        print("[PUBLISH][EN] Generazione HTML EN...")
-        render_markdown_page(Path(md_en), out_root="docs")
+        for code, label, out_root in LANG_CONFIG:
+            print(f"[GEN][{code.upper()}] Generazione pagina {label}...")
+            page = generate_saas_page(tool, language=code)
 
-        # IT
-        print("[GEN][IT] Generazione pagina IT...")
-        page_it = generate_saas_page(tool, language="it")
-        print("[WRITE][IT] Salvataggio markdown IT...")
-        md_it = write_markdown_page(tool, page_it, out_dir="content_it", page_language="it")
-        print("[PUBLISH][IT] Generazione HTML IT...")
-        render_markdown_page(Path(md_it), out_root="docs/it")
+            out_dir = f"content_{code}"
+            print(f"[WRITE][{code.upper()}] Salvataggio markdown in {out_dir}...")
+            md_path = write_markdown_page(
+                tool,
+                page,
+                out_dir=out_dir,
+                page_language=code,
+            )
+
+            print(f"[PUBLISH][{code.upper()}] Generazione HTML in {out_root}...")
+            render_markdown_page(Path(md_path), out_root=out_root)
 
     if web_tools:
-        build_index_html(web_tools, out_root="docs", second_lang_code="it")
+        build_index_html(web_tools, out_root="docs")
 
 
 if __name__ == "__main__":
