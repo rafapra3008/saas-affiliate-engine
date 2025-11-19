@@ -17,14 +17,16 @@ def _slugify(text: str) -> str:
     return text.strip("-") or "tool"
 
 
-def build_index_html(tools: List[SaaSTool], out_root: str = "docs") -> Path:
+def build_index_html(tools: List[SaaSTool], out_root: str = "docs", second_lang_code: str = "it") -> Path:
     root = Path(out_root)
     root.mkdir(parents=True, exist_ok=True)
 
-    items = []
+    items_en = []
+    items_it = []
     for tool in tools:
         slug = _slugify(tool.name)
-        items.append(f'<li><a href="{slug}/">{tool.name}</a></li>')
+        items_en.append(f'<li><a href="{slug}/">{tool.name} (EN)</a></li>')
+        items_it.append(f'<li><a href="{second_lang_code}/{slug}/">{tool.name} ({second_lang_code.upper()})</a></li>')
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -37,8 +39,15 @@ def build_index_html(tools: List[SaaSTool], out_root: str = "docs") -> Path:
 <body>
   <h1>SaaS Affiliate Engine</h1>
   <p>Auto-generated pages for SaaS tools.</p>
+
+  <h2>English</h2>
   <ul>
-    {''.join(items)}
+    {''.join(items_en)}
+  </ul>
+
+  <h2>Italiano</h2>
+  <ul>
+    {''.join(items_it)}
   </ul>
 </body>
 </html>
@@ -66,17 +75,24 @@ def main():
         print(f"\n=== TOOL {idx}/{len(web_tools)} ===")
         print(f"- {tool.name} | lang={tool.main_language} | url={tool.homepage}")
 
-        print("[GEN] Generazione pagina con Gemini...")
-        page = generate_saas_page(tool, language=tool.main_language or "en")
+        # EN
+        print("[GEN][EN] Generazione pagina EN...")
+        page_en = generate_saas_page(tool, language="en")
+        print("[WRITE][EN] Salvataggio markdown EN...")
+        md_en = write_markdown_page(tool, page_en, out_dir="content_en", page_language="en")
+        print("[PUBLISH][EN] Generazione HTML EN...")
+        render_markdown_page(Path(md_en), out_root="docs")
 
-        print("[WRITE] Salvataggio markdown...")
-        md_path = write_markdown_page(tool, page, out_dir="content")
-
-        print("[PUBLISH] Generazione HTML...")
-        render_markdown_page(Path(md_path), out_root="docs")
+        # IT
+        print("[GEN][IT] Generazione pagina IT...")
+        page_it = generate_saas_page(tool, language="it")
+        print("[WRITE][IT] Salvataggio markdown IT...")
+        md_it = write_markdown_page(tool, page_it, out_dir="content_it", page_language="it")
+        print("[PUBLISH][IT] Generazione HTML IT...")
+        render_markdown_page(Path(md_it), out_root="docs/it")
 
     if web_tools:
-        build_index_html(web_tools, out_root="docs")
+        build_index_html(web_tools, out_root="docs", second_lang_code="it")
 
 
 if __name__ == "__main__":

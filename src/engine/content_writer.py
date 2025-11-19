@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 
 from .collector import SaaSTool
 
@@ -17,6 +17,7 @@ def write_markdown_page(
     tool: SaaSTool,
     page: Dict[str, str],
     out_dir: str = "content",
+    page_language: Optional[str] = None,
 ) -> Path:
     """
     Scrive una pagina markdown con una frontmatter semplice.
@@ -31,10 +32,10 @@ def write_markdown_page(
     subtitle = page.get("subtitle", "")
     body = page.get("body_markdown", "")
 
-    # Sanitizziamo le virgolette prima, fuori dalle f-string
     title_s = title.replace('"', "'")
     subtitle_s = subtitle.replace('"', "'")
     tool_name_s = tool.name.replace('"', "'")
+    language = page_language or tool.main_language or "en"
 
     frontmatter = [
         "---",
@@ -42,7 +43,7 @@ def write_markdown_page(
         f'subtitle: "{subtitle_s}"',
         f'tool_name: "{tool_name_s}"',
         f'homepage: "{tool.homepage}"',
-        f'language: "{tool.main_language}"',
+        f'language: "{language}"',
         "---",
         "",
     ]
