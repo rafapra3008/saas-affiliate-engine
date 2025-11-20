@@ -1,29 +1,22 @@
 ---
-title: "Notion AI: Domine a Produtividade."
-subtitle: "Pare de pular entre apps. Notion é o seu hub unificado para notas, projetos, bases de conhecimento e tarefas, agora potencializado por IA que escreve, resume e organiza por você."
+title: "Notion: O Workspace de IA que Pensa por Você"
+subtitle: "Unifique notas, projetos e bases de conhecimento em uma única plataforma flexível e potente. Crie, organize e automatize suas tarefas com inteligência artificial integrada."
 tool_name: "The AI workspace that works for you. | Notion"
 homepage: "https://notion.so"
 language: "pt"
 ---
-### O Workspace que Pensa Por Você
+**Para Quem É:** Este é o software essencial para equipes que buscam centralizar informações, freelancers, criadores de conteúdo e estudantes que precisam de um sistema de organização digital altamente personalizável.
 
-**Para Quem É:**
-Para equipes de todos os tamanhos, estudantes, freelancers e qualquer pessoa buscando consolidar a gestão de projetos, bases de conhecimento e organização pessoal em uma única plataforma.
-
-**Principais Casos de Uso:**
-*   Gestão de projetos complexos (Kanban, Sprints, Roadmaps).
-*   Criação de wikis e FAQs internos para integração de novos membros.
-*   Planejamento de conteúdo e calendários editoriais.
-*   Organização de estudos, notas de reuniões e rastreamento de hábitos.
+**Casos de Uso Principais:** Gerenciamento ágil de projetos (Kanban, Sprints), documentação interna (Wikis), bases de dados robustas (CRM, rastreamento de estoque) e anotações rápidas com organização automática.
 
 **Recursos Chave:**
-*   **AI Integrada:** Geração de texto, resumo de documentos longos, tradução e brainstorms instantâneos.
-*   **Blocos Modulares:** Personalização total de layouts (arrastar e soltar) sem precisar de código.
-*   **Bases de Dados Flexíveis:** Tabelas, calendários e listas conectadas em tempo real.
-*   **Colaboração em Tempo Real:** Edição simultânea e controle de permissões sofisticado para equipes.
+*   **Notion AI:** Geração de conteúdo, resumos e traduções instantâneas.
+*   **Bases de Dados Flexíveis:** Transforme listas em tabelas, calendários ou quadros Kanban com um clique.
+*   **Colaboração em Tempo Real:** Edite e comente documentos simultaneamente com sua equipe.
+*   **Milhares de Templates:** Configure qualquer fluxo de trabalho em minutos.
 
-**Preços (Visão Geral):**
-Disponível no plano **Gratuito** (ideal para uso pessoal e testes). Planos pagos (Plus, Business, Enterprise) oferecem recursos de IA sem limites, mais espaço de upload e ferramentas avançadas para equipes.
+**Preços:** Notion oferece um **Plano Gratuito** robusto, ideal para indivíduos e testes iniciais. Planos pagos (Plus, Business e Enterprise) fornecem maior espaço de armazenamento, funcionalidades avançadas de IA e ferramentas de administração para grandes equipes.
 
-**A Chamada:**
-Transforme a maneira como você trabalha e economize horas de trabalho manual por semana. **Comece a usar o Notion gratuitamente hoje e experimente o futuro da organização!**
+**Liberte-se da desorganização. Clique abaixo e comece a construir seu workspace inteligente hoje mesmo:**
+
+[**COMECE GRATUITAMENTE AQUI**](https://notion.so)

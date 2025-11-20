@@ -6,6 +6,9 @@ from .collector import get_sample_saas_tools, collect_saas_from_seed_urls, SaaST
 from .content_generator import generate_saas_page
 from .content_writer import write_markdown_page
 from .publisher import render_markdown_page
+from .run_logger import start_run, end_run
+from .affiliates import get_affiliate_url
+from .click_urls import get_click_url
 
 
 def _slugify(text: str) -> str:
@@ -30,11 +33,9 @@ def build_index_html(tools: List[SaaSTool], out_root: str = "docs") -> Path:
 
     sections = []
     for code, label, prefix_root in LANG_CONFIG:
-        # calcola prefisso URL rispetto a docs/
         if prefix_root == "docs":
             prefix = ""
         else:
-            # es. "docs/it" -> "it"
             prefix = prefix_root.split("/", 1)[1]
 
         items = []
@@ -69,6 +70,8 @@ def build_index_html(tools: List[SaaSTool], out_root: str = "docs") -> Path:
 
 
 def main():
+    run_start = start_run()
+
     env = get_env()
     print(f"SaaS Affiliate Engine v0.1 - ENV={env}")
 
@@ -85,9 +88,14 @@ def main():
         print(f"\n=== TOOL {idx}/{len(web_tools)} ===")
         print(f"- {tool.name} | lang={tool.main_language} | url={tool.homepage}")
 
+        affiliate_url = get_affiliate_url(tool)
+        click_url = get_click_url(tool)
+        print(f"[AFF] URL affiliazione: {affiliate_url}")
+        print(f"[CLICK] URL usato nella CTA: {click_url}")
+
         for code, label, out_root in LANG_CONFIG:
             print(f"[GEN][{code.upper()}] Generazione pagina {label}...")
-            page = generate_saas_page(tool, language=code)
+            page = generate_saas_page(tool, language=code, affiliate_url=click_url)
 
             out_dir = f"content_{code}"
             print(f"[WRITE][{code.upper()}] Salvataggio markdown in {out_dir}...")
@@ -103,6 +111,15 @@ def main():
 
     if web_tools:
         build_index_html(web_tools, out_root="docs")
+
+    language_codes = [code for code, _, _ in LANG_CONFIG]
+    end_run(
+        start_ts=run_start,
+        num_tools=len(web_tools),
+        languages=language_codes,
+        extra={"env": env},
+        out_dir="logs",
+    )
 
 
 if __name__ == "__main__":
