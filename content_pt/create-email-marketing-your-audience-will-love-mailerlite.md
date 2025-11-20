@@ -1,27 +1,31 @@
 ---
-title: "MailerLite: E-mail Marketing Que Gera Conexão"
-subtitle: "Crie newsletters e campanhas de e-mail profissionais sem complicação. A plataforma intuitiva ideal para fazer sua audiência crescer e engajar."
+title: "MailerLite: O Email Marketing Que Impulsiona o Seu Crescimento"
+subtitle: "Crie campanhas de email belíssimas e automatize seu fluxo de trabalho com a plataforma de marketing mais intuitiva, projetada para converter."
 tool_name: "Create Email Marketing Your Audience Will Love - MailerLite"
 homepage: "https://mailerlite.com"
 language: "pt"
+affiliate_url: "https://mailerlite.com"
+click_url: "https://mailerlite.com"
 ---
-**Para Quem É:** Empreendedores, Criadores de Conteúdo, Blogueiros e Pequenas Empresas que buscam uma solução de e-mail marketing poderosa, mas fácil de usar.
+### O Que É o MailerLite?
 
-**Principais Casos de Uso:**
-- Nutrição e conversão de leads (Lead Nurturing).
-- Automação de vendas e fluxo de boas-vindas.
-- Construção de lista utilizando landing pages e formulários integrados.
+O MailerLite é a solução ideal para **empreendedores individuais, pequenas e médias empresas (PMEs) e criadores de conteúdo** que precisam de uma ferramenta poderosa de email marketing, mas fácil de usar.
 
-**Recursos Chave:**
-- **Editor Drag & Drop:** Crie e-mails com design profissional em minutos.
-- **Automação Avançada:** Configure fluxos de trabalho que vendem enquanto você dorme.
-- **Landing Pages e Sites:** Crie páginas de captura sem precisar de codificação.
-- **Segmentação Inteligente:** Envie a mensagem certa para a pessoa certa.
+**Casos de Uso:**
+*   Envio de newsletters regulares e profissionais.
+*   Nutrição automática de leads e segmentação de clientes.
+*   Construção de listas de email com Landing Pages e formulários pop-up.
+*   Automação de fluxos de boas-vindas e abandono de carrinho.
 
-**Preços:** MailerLite oferece um Plano **GRÁTIS** generoso para iniciantes. Planos pagos são escaláveis com base no número de assinantes e oferecem recursos avançados de otimização e entregabilidade.
+**Recursos em Destaque:**
+*   **Editor Drag-and-Drop:** Crie emails visualmente impressionantes sem precisar de código.
+*   **Automação Avançada:** Configure jornadas do cliente complexas com facilidade.
+*   **Segmentação Inteligente:** Envie a mensagem certa, para a pessoa certa, na hora certa.
+*   **Ferramentas de Crescimento:** Inclui Websites e Landing Pages de alta conversão.
 
----
+**Preços:**
+Comece **GRATUITAMENTE!** O MailerLite oferece um plano gratuito robusto, ideal para quem está começando. Planos pagos flexíveis e acessíveis escalam à medida que sua lista de contatos cresce.
 
-**Leve seu E-mail Marketing para o próximo nível.**
+Pronto para aumentar o seu público e suas vendas?
 
-[Experimente o MailerLite Agora](https://mailerlite.com)
+[Experimente o MailerLite Grátis Aqui](https://mailerlite.com)

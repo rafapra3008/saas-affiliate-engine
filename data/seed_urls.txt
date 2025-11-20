@@ -1,8 +1,28 @@
+# Email marketing / newsletter
+https://mailerlite.com
+https://convertkit.com
+https://brevo.com
+https://getresponse.com
+https://aweber.com
+https://mailchimp.com
+
+# Funnel / automazione / corsi
+https://systeme.io
+https://clickfunnels.com
+https://kajabi.com
+https://teachable.com
+https://thinkific.com
+https://kartra.com
+
+# Hosting / site builder / publishing
+https://webflow.com
+https://ghost.org
+https://wordpress.com
+https://wix.com
+https://squarespace.com
+https://framer.com
+
+# Produttività / workspace (già usati ma li teniamo)
 https://slack.com
 https://notion.so
 https://zapier.com
-https://convertkit.com
-https://mailerlite.com
-https://systeme.io
-https://webflow.com
-https://ghost.org

@@ -18,9 +18,11 @@ def write_markdown_page(
     page: Dict[str, str],
     out_dir: str = "content",
     page_language: Optional[str] = None,
+    affiliate_url: Optional[str] = None,
+    click_url: Optional[str] = None,
 ) -> Path:
     """
-    Scrive una pagina markdown con una frontmatter semplice.
+    Scrive una pagina markdown con una frontmatter semplice + info affiliazione.
     """
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)
@@ -37,6 +39,9 @@ def write_markdown_page(
     tool_name_s = tool.name.replace('"', "'")
     language = page_language or tool.main_language or "en"
 
+    affiliate_s = (affiliate_url or tool.homepage).replace('"', "'")
+    click_s = (click_url or affiliate_s).replace('"', "'")
+
     frontmatter = [
         "---",
         f'title: "{title_s}"',
@@ -44,6 +49,8 @@ def write_markdown_page(
         f'tool_name: "{tool_name_s}"',
         f'homepage: "{tool.homepage}"',
         f'language: "{language}"',
+        f'affiliate_url: "{affiliate_s}"',
+        f'click_url: "{click_s}"',
         "---",
         "",
     ]

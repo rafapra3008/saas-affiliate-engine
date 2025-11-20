@@ -1,0 +1,12 @@
+{
+  "start_ts": 1763664866.9088173,
+  "end_ts": 1763664935.5597358,
+  "duration_sec": 68.65091848373413,
+  "num_tools": 3,
+  "languages": [
+    "en",
+    "it",
+    "pt"
+  ],
+  "env": "dev"
+}

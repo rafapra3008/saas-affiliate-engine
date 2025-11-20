@@ -1,33 +1,27 @@
 ---
-title: "GHOST: A Plataforma de Assinaturas e Blogs Profissionais"
-subtitle: "Crie um site de mídia e newsletter elegante, retenha 100% da sua receita e transforme sua audiência na sua principal fonte de renda."
+title: "Ghost: A Plataforma Definitiva de Blogs e Newsletters"
+subtitle: "Crie um negócio de mídia poderoso e rápido. Ghost combina CMS moderno com assinaturas pagas e newsletters, permitindo que você monetize diretamente seu público."
 tool_name: "Ghost: The best open source blog & newsletter platform"
 homepage: "https://ghost.org"
 language: "pt"
+affiliate_url: "https://ghost.org"
+click_url: "https://ghost.org"
 ---
-**Para Quem é o Ghost?**
+**Para Quem?**
+Criadores de conteúdo, jornalistas, publishers independentes e empresas que buscam construir comunidades pagas e newsletters premium sem depender de plataformas complexas ou lentas.
 
-Ideal para criadores de conteúdo independentes, jornalistas, empreendedores digitais e publishers que buscam total controle e monetização direta, fugindo do modelo de receita baseado em anúncios.
-
-**Usos Principais:**
-
-*   **Blogs de Alto Desempenho:** Construção de websites rápidos e focados em conteúdo.
-*   **Newsletters Premium:** Gestão de listas de e-mail e envio de newsletters diretamente da plataforma.
-*   **Comunidades de Membros Pagantes:** Venda de acesso a conteúdo exclusivo e newsletters pagas (paywalls).
+**Principais Usos:**
+*   **Monetização Direta:** Gerenciamento nativo de membros e assinaturas pagas (paywall).
+*   **Newsletter Avançada:** Envie e gerencie newsletters diretamente do seu site.
+*   **Blog Profissional:** Hospedagem ultrarrápida e foco em performance e SEO.
 
 **Recursos em Destaque:**
+*   **Open Source:** Flexibilidade total ou opção de hospedagem gerenciada (Ghost(Pro)).
+*   **Editor Intuitivo:** Interface minimalista focada na escrita.
+*   **Integrado:** Ferramentas de assinatura, análises e automação integradas.
 
-*   **Monetização Nativa:** Sistema de membros e assinaturas integrado, suportado pelo Stripe.
-*   **Editor Simples:** Interface minimalista e poderosa, focada na escrita.
-*   **Velocidade e SEO:** Código otimizado para garantir carregamento rápido e alta performance nos mecanismos de busca.
-*   **Open Source:** Flexibilidade total no código e na hospedagem.
+**Preços:**
+A tecnologia Ghost é open source e gratuita (self-hosted). Para quem prefere uma solução sem complicações, o Ghost(Pro) oferece planos gerenciados e escaláveis, ideais para criadores em crescimento.
 
-**Visão Geral de Preços:**
-
-Ghost oferece flexibilidade:
-1.  **Gratuito (Self-Hosted):** Baixe e instale a versão open source em seu próprio servidor, sem custos de licença.
-2.  **Ghost(Pro) (Gerenciado):** Planos de hospedagem gerenciada (a partir de US$ 9/mês) que oferecem suporte, segurança e escalabilidade automática para quem prefere uma solução plug-and-play.
-
-Seja o editor do seu próprio destino. Pare de construir sua casa na terra de outras pessoas.
-
-[Comece a Criar Seu Negócio Agora!](https://ghost.org)
+**Acelere seu negócio de conteúdo hoje mesmo:**
+[Conheça o Ghost e Comece a Monetizar Seu Público](https://ghost.org)

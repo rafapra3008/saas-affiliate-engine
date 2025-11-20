@@ -1,28 +1,32 @@
 ---
-title: "Systeme.io: O Tudo-em-Um Essencial"
-subtitle: "Pare de pagar por softwares separados. Systeme.io combina automação de marketing, funis de venda, email marketing e cursos online em uma única plataforma poderosa."
+title: "Systeme.io: A Única Ferramenta que Você Precisa."
+subtitle: "Pare de pagar por softwares fragmentados. Systeme.io centraliza todas as ferramentas essenciais para construir, gerenciar e escalar seu negócio digital."
 tool_name: "Systeme.io - The only tool you need to launch your online business"
 homepage: "https://systeme.io"
 language: "pt"
+affiliate_url: "https://systeme.io"
+click_url: "https://systeme.io"
 ---
-**Para Quem:** Criadores de conteúdo, coaches, infoprodutores, afiliados e pequenos empresários que desejam lançar e escalar seu negócio online com simplicidade.
+**Para Quem É:**
 
-**Usos Principais:**
+Para empreendedores digitais, infoprodutores, coaches e qualquer pessoa que queira monetizar seu conhecimento online sem complicação técnica.
 
-*   Lançamento de produtos digitais (cursos e e-books).
-*   Captação de leads e gestão de listas de email.
-*   Criação de funis de vendas de alta conversão.
+**Principais Usos:**
+
+Lançamento e hospedagem de cursos online, construção de funis de venda de alta conversão, automação de e-mail marketing e gestão de programas de afiliados.
 
 **Recursos Chave:**
 
-*   Construtor de Funis Arrastar-e-Soltar.
-*   Email Marketing e Newsletters.
-*   Sites de Membros e Hospedagem de Cursos.
-*   Programa de Afiliados Integrado.
-*   Webinars e Automações.
+*   Criador de Funis de Venda (Drag & Drop)
+*   E-mail Marketing Ilimitado e Automação
+*   Gestão Completa de Cursos e Áreas de Membros
+*   Blog e Criação de Websites
+*   Programa de Afiliados Nativo e Processamento de Pagamentos
 
-**Preços:** Systeme.io oferece um plano **GRÁTIS para sempre** robusto, ideal para começar, além de planos pagos escaláveis e altamente competitivos.
+**Preços:**
 
-**Simplifique sua operação e economize tempo. A ferramenta completa que cabe no seu bolso espera por você.**
+Inclui um plano GRÁTIS vitalício, perfeito para quem está começando. Planos pagos acessíveis para escalar sem limites de contato.
 
-Clique no botão e [Comece Grátis Agora](https://systeme.io)
+**A Revolução All-in-One Está Aqui.** Simplifique sua operação, corte custos e foque no crescimento.
+
+[Crie sua Conta GRÁTIS no Systeme.io](https://systeme.io)
