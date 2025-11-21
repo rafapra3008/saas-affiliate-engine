@@ -1,6 +1,7 @@
 import json
 from collections import Counter
 from pathlib import Path
+from urllib.parse import urlparse
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -26,9 +27,10 @@ def load_click_logs():
     total_clicks = 0
     by_slug = Counter()
     by_target = Counter()
+    by_domain = Counter()
 
     if not CLICKS_DIR.exists():
-        return total_clicks, by_slug, by_target
+        return total_clicks, by_slug, by_target, by_domain
 
     for path in sorted(CLICKS_DIR.glob("*.jsonl")):
         try:
@@ -51,10 +53,16 @@ def load_click_logs():
                     target = rec.get("target_url") or rec.get("url")
                     if target:
                         by_target[target] += 1
+                        try:
+                            domain = urlparse(target).netloc.lower()
+                            if domain:
+                                by_domain[domain] += 1
+                        except Exception:
+                            pass
         except Exception as e:
             print(f"[WARN] Impossibile leggere click log {path}: {e}")
 
-    return total_clicks, by_slug, by_target
+    return total_clicks, by_slug, by_target, by_domain
 
 
 def main():
@@ -65,7 +73,6 @@ def main():
     pages_estimated = 0
 
     for log in run_logs:
-        # Nei log attuali usiamo 'num_tools'
         tools = log.get("num_tools") or 0
 
         languages = log.get("languages") or []
@@ -82,14 +89,13 @@ def main():
         tools_total += tools_int
         pages_estimated += tools_int * max(1, len(languages))
 
-    # Per ora non distinguiamo success/error: consideriamo tutti i log come run valide
+    # Per ora consideriamo tutte le run come "success" a livello di conteggio
     success_runs = num_runs
     error_runs = 0
 
-    total_clicks, by_slug, by_target = load_click_logs()
+    total_clicks, by_slug, by_target, by_domain = load_click_logs()
 
-    print("=== SaaS Affiliate Engine – Metrics snapshot ===")
-    print()
+    print("=== SaaS Affiliate Engine – Metrics snapshot ===\n")
     print(">> Run / generazione")
     print(f"- Run totali: {num_runs}")
     print(f"- Run con success (approx): {success_runs}")
@@ -110,13 +116,31 @@ def main():
         for url, count in by_target.most_common(5):
             print(f"  • {url}: {count} click")
 
-    print()
-    print("Nota: questi numeri sono grezzi ma bastano per capire:")
+    if by_domain:
+        print("- Top domini (programmi affiliati) per click:")
+        for dom, count in by_domain.most_common(10):
+            print(f"  • {dom}: {count} click")
+
+        focus_domains = [
+            "www.mailerlite.com",
+            "mailerlite.com",
+            "systeme.io",
+            "getresponse.com",
+            "gr8.com",
+        ]
+        found_focus = False
+        for dom in focus_domains:
+            if dom in by_domain:
+                if not found_focus:
+                    print("\n  Focus programmi principali:")
+                    found_focus = True
+                print(f"  - {dom}: {by_domain[dom]} click")
+
+    print("\nNota: questi numeri sono grezzi ma bastano per capire:")
     print("- quanto spesso gira il motore")
     print("- quante pagine stai producendo (stima)")
-    print("- quali tool / URL ricevono più click")
-    print()
-    print("Per analisi più avanzate (CTR, revenue, ML) serviranno poi dati aggiuntivi.")
+    print("- quali pagine e quali domini affiliati ricevono più click")
+    print("\nPer analisi più avanzate (CTR, revenue, ML) serviranno poi dati aggiuntivi.")
 
 
 if __name__ == "__main__":
