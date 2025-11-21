@@ -1,0 +1,12 @@
+# Env files
+.env
+.env.*
+
+# Logs & local stuff
+logs/
+click_logs/
+cron.log
+
+# Python cache
+__pycache__/
+*.pyc
