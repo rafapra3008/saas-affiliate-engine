@@ -35,3 +35,15 @@ def get_max_tools_per_run(default: int = 10) -> int:
         return max(1, n)
     except ValueError:
         return default
+
+
+def get_openai_compat_base_url() -> str:
+    return os.getenv("OPENAI_COMPAT_BASE_URL", "")
+
+
+def get_openai_compat_api_key() -> str:
+    return os.getenv("OPENAI_COMPAT_API_KEY", "")
+
+
+def get_openai_compat_model() -> str:
+    return os.getenv("OPENAI_COMPAT_MODEL", "")

@@ -71,3 +71,26 @@ Costruire un motore automatizzato che:
 - Minimo contatto umano diretto.
 - Budget iniziale target: <= 500€ nei primi 3 mesi, ma si parte quasi a costo zero.
 - Lingue operative: EN, IT, PT (priorità per i contenuti).
+
+## Roadmap settimanale (bozza)
+
+- **Settimana 1 – Stabilizzazione base**
+  - Mettere in piedi il motore SaaS affiliate.
+  - Sistemare gestione segreti (`.env` fuori da Git, chiavi ruotate).
+  - Attivare logging run + notifiche Telegram + sitemap.
+
+- **Settimana 2 – Espansione contenuti**
+  - Ampliare seed SaaS mirati (email, funnel, hosting, produttività).
+  - Raffinare prompt per contenuti più “SEO-friendly”.
+  - Integrare e verificare i principali link di affiliazione reali.
+
+- **Settimana 3 – Robustezza LLM**
+  - Testare e valutare provider LLM alternativi (es. Qwen via OpenAI-compatible).
+  - Attivare fallback reale in produzione solo dopo test controllati.
+  - Monitorare costi per chiamata e qualità output.
+
+- **Settimana 4 – Metriche e primi esperimenti ML**
+  - Definire e tracciare metriche: pagine indicizzate, click affiliati, CTR, revenue/giorno.
+  - Introdurre piccoli esperimenti di ottimizzazione (A/B su prompt, selezione tool, priorità seed).
+  - Preparare terreno per usare ML sul loop di miglioramento (scelta tool, scoring contenuti, ecc.).
+
