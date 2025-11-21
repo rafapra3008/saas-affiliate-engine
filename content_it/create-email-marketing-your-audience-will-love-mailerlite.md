@@ -1,28 +1,27 @@
 ---
-title: "MailerLite: L'Email Marketing Che Rende Felice il Tuo Pubblico"
-subtitle: "Crea campagne email professionali, automatizza il tuo workflow e fai crescere la tua attività in modo semplice e intuitivo. Potenza avanzata, zero complessità."
+title: "MailerLite: L'Email Marketing che Funziona."
+subtitle: "Crea newsletter sorprendenti e automatizza le tue campagne senza sforzo. È lo strumento di email marketing scelto da oltre un milione di aziende e creatori."
 tool_name: "Create Email Marketing Your Audience Will Love - MailerLite"
 homepage: "https://mailerlite.com"
 language: "it"
 affiliate_url: "https://mailerlite.com"
 click_url: "https://mailerlite.com"
 ---
-MailerLite è la soluzione ideale per **piccole e medie imprese, blogger, creatori digitali e freelance** che necessitano di una piattaforma di email marketing performante ma accessibile.
+**Per chi è:** Ideale per piccole imprese (PMI), freelance, blogger ed e-commerce che cercano una soluzione potente ma incredibilmente facile da usare, eliminando la curva di apprendimento tipica di altri strumenti.
 
-**Casi d'Uso Principali:**
-*   Invio di newsletter e comunicazioni periodiche.
-*   Automazione di sequenze di benvenuto, abbandono carrello o promozionali.
-*   Creazione e hosting di landing page professionali per la lead generation.
-*   Segmentazione avanzata della lista iscritti per messaggi mirati.
+**Casi d'uso:**
+*   Invio di newsletter periodiche e annunci promozionali.
+*   Creazione di landing page e form di iscrizione ad alta conversione.
+*   Segmentazione del pubblico e setup di sequenze di automazione (funnel).
 
-**Funzionalità Chiave:**
-*   **Editor Drag & Drop:** Crea email e landing page straordinarie senza scrivere codice.
-*   **Automazione Intelligente:** Mappa il customer journey con flussi di lavoro visuali.
-*   **Gestione Iscretti:** Segmentazione, tag e pulizia automatica della lista.
-*   **Siti Web:** Costruisci interi siti o moduli pop-up direttamente sulla piattaforma.
+**Caratteristiche principali:**
+*   Editor Drag-and-Drop per email e newsletter.
+*   Automazioni potenti (benedette dai neofiti).
+*   Creazione di Siti Web, Pop-up e Landing Page professionali.
+*   Analisi e report dettagliati sulle performance delle campagne.
 
-**Prezzi:** MailerLite offre un piano **gratuito per sempre** che include funzionalità essenziali fino a 1.000 iscritti. I piani a pagamento sono scalabili e si adattano perfettamente alla crescita della tua lista.
+**Prezzi:** Offre un piano GRATUITO permanente (fino a 1.000 abbonati e 12.000 email/mese). I piani a pagamento sono estremamente flessibili e scalano in base al numero di iscritti.
 
-Inizia oggi stesso a trasformare gli iscritti in clienti fedeli.
+Inizia oggi stesso a costruire la tua lista con il software di email marketing più intuitivo sul mercato.
 
-[**Inizia la tua prova gratuita su MailerLite**](https://mailerlite.com)
+[Inizia GRATIS con MailerLite](https://mailerlite.com)

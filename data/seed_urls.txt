@@ -1,20 +1,19 @@
-# Email marketing / newsletter
+# Email marketing & newsletter
 https://mailerlite.com
-https://convertkit.com
-https://brevo.com
 https://getresponse.com
 https://aweber.com
 https://mailchimp.com
+https://activecampaign.com
+https://sendfox.com
 
-# Funnel / automazione / corsi
+# Funnels, automazione & corsi
 https://systeme.io
 https://clickfunnels.com
 https://kajabi.com
 https://teachable.com
-https://thinkific.com
 https://kartra.com
 
-# Hosting / site builder / publishing
+# Websites, hosting & publishing
 https://webflow.com
 https://ghost.org
 https://wordpress.com
@@ -22,7 +21,7 @@ https://wix.com
 https://squarespace.com
 https://framer.com
 
-# Produttività / workspace (già usati ma li teniamo)
+# Produttività / workspace / automazione generale
 https://slack.com
 https://notion.so
 https://zapier.com
