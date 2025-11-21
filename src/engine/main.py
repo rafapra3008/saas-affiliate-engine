@@ -104,6 +104,13 @@ def build_index_html(tools: List[SaaSTool], out_root: str = "docs") -> Path:
         nav_items.append(f'<li><a href="#{cat_key}">{label}</a></li>')
     nav_html = "<ul>" + "".join(nav_items) + "</ul>"
 
+    # Sezione pagine in evidenza (hub manuali)
+    featured_links = [
+        '<li><a href="best-email-marketing-tools-for-creators/">Best email marketing tools for creators</a></li>',
+        '<li><a href="best-funnel-and-all-in-one-platforms/">Best funnel and all-in-one platforms for online business</a></li>',
+    ]
+    featured_html = "<ul>" + "".join(featured_links) + "</ul>"
+
     for cat_key in ["email", "funnel", "website", "other"]:
         label = CATEGORY_LABELS[cat_key]
         tools_in_cat = grouped.get(cat_key, [])
@@ -139,6 +146,9 @@ def build_index_html(tools: List[SaaSTool], out_root: str = "docs") -> Path:
 <body>
   <h1>SaaS Affiliate Engine</h1>
   <p>Auto-generated pages for SaaS tools (EN/IT/PT) used to build and grow online businesses.</p>
+
+  <h2>Featured pages</h2>
+  {featured_html}
 
   <h2>Categorie</h2>
   {nav_html}
