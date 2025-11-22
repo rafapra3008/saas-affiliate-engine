@@ -6,7 +6,7 @@ Per ora:
 - usiamo un breakout di massimo recente
 - generiamo una Serie di segnali (1 = segnale long, 0 = nessun segnale)
 
-La gestione della posizione completa (hold/exit) verrà fatta dal backtester.
+La gestione completa della posizione (hold/exit, ATR stop) viene fatta dal backtester.
 """
 
 from dataclasses import dataclass
@@ -19,12 +19,14 @@ from ..data import load_btc_daily_csv
 
 @dataclass
 class BTCTrendDailyParams:
-    ma_long_window: int = 150
-    breakout_lookback: int = 20
-    atr_window: int = 14  # non ancora usato
-    atr_stop_multiple: float = 2.0  # non ancora usato
+    # Parametri default scelti dopo il primo param sweep:
+    # MA più lenta e breakout più lungo per filtrare meglio il rumore.
+    ma_long_window: int = 200
+    breakout_lookback: int = 40
+    atr_window: int = 14
+    atr_stop_multiple: float = 1.5
     atr_take_multiple: float = 3.0  # non ancora usato
-    max_hold_days: int = 60  # non ancora usato
+    max_hold_days: int = 60
 
 
 def _ensure_params(params: BTCTrendDailyParams | Dict[str, Any]) -> BTCTrendDailyParams:
