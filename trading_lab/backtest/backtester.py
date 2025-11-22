@@ -1,16 +1,19 @@
 """
-Backtester generico (prima versione).
+Backtester generico (con stop basato su ATR, prima versione).
 
-Assunzioni per Fase 0–1:
-- dati: DataFrame con almeno colonne 'open' e 'close', indice datetime (daily).
+Assunzioni Fase 0–1:
+- dati: DataFrame con almeno colonne 'open', 'high', 'low', 'close', indice datetime (daily).
 - signals: Serie con 0/1 (1 = segnale di ingresso long quel giorno).
 - Solo una posizione alla volta (long-only, no leva).
-- Entrata: al prezzo di OPEN del giorno successivo al segnale (se esiste).
-- Uscita: dopo un numero massimo di giorni (max_hold_days) al prezzo di CLOSE.
-- Commissioni: percentuale per lato applicata su entrata e uscita.
 
-Questo è un modello semplice per iniziare: l'obiettivo è avere una equity curve con cui
-ragionare, non ancora la strategia finale.
+Regole:
+- Entrata: al prezzo di OPEN del giorno successivo al segnale (se esiste).
+- Stop-loss: prezzo di entrata - (atr_stop_multiple * ATR) calcolato sul giorno di entrata.
+- Uscita:
+  - se il minimo della candela scende sotto lo stop → si esce a stop,
+  - oppure dopo max_hold_days al prezzo di CLOSE,
+  - oppure sull’ultima barra disponibile.
+- Commissioni: percentuale per lato su entrata e uscita.
 """
 
 from dataclasses import dataclass
@@ -26,29 +29,52 @@ class BacktestResult:
     stats: Dict[str, Any]
 
 
+def _compute_atr(data: pd.DataFrame, window: int) -> pd.Series:
+    """
+    Calcola un ATR semplice (media mobile del True Range).
+    """
+    high = data["high"].astype(float)
+    low = data["low"].astype(float)
+    close = data["close"].astype(float)
+
+    prev_close = close.shift(1)
+
+    tr1 = high - low
+    tr2 = (high - prev_close).abs()
+    tr3 = (low - prev_close).abs()
+
+    tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+    atr = tr.rolling(window, min_periods=window).mean()
+    atr.name = "atr"
+    return atr
+
+
 def run_backtest(
     data: pd.DataFrame,
     signals: pd.Series,
     initial_capital: float = 10000.0,
     commission_rate: float = 0.001,
     max_hold_days: int = 60,
+    atr_window: Optional[int] = None,
+    atr_stop_multiple: Optional[float] = None,
 ) -> BacktestResult:
     """
-    Esegue un backtest molto semplice basato su segnali di ENTRATA (1) / no-signal (0).
+    Esegue un backtest basato su segnali di ENTRATA (1) / no-signal (0),
+    con possibilità di stop-loss basato su ATR.
 
     Regole:
-    - Se non siamo in posizione e c'è segnale=1 in una data T,
-      entriamo long all'OPEN del giorno T+1 (se esiste).
-    - Manteniamo la posizione per al massimo `max_hold_days` giorni di trading.
-    - Usciamo al CLOSE del giorno di uscita.
-    - Niente stop dinamici per ora, solo tempo massimo.
-    - Commissione: percentuale per lato su valore nozionale (open e close).
+    - Se non siamo in posizione e c'è segnale=1 a data T,
+      entriamo long all'OPEN di T+1 (se esiste).
+    - Stop iniziale (se configurato): entry_price - atr_stop_multiple * ATR(T+1).
+    - Durante la posizione:
+      - se il LOW della barra corrente scende sotto lo stop → chiusura a stop,
+      - altrimenti, se superiamo max_hold_days o è l'ultima barra → chiusura a CLOSE.
     """
 
-    if "open" not in data.columns or "close" not in data.columns:
-        raise ValueError("Il DataFrame dati deve contenere colonne 'open' e 'close'.")
+    required_cols = {"open", "high", "low", "close"}
+    if not required_cols.issubset(set(data.columns)):
+        raise ValueError(f"Il DataFrame dati deve contenere le colonne: {required_cols}")
 
-    # Allineiamo signals a data
     data = data.sort_index()
     signals = signals.reindex(data.index).fillna(0).astype(int)
 
@@ -56,33 +82,44 @@ def run_backtest(
     equity_values = []
     capital = initial_capital
 
+    # ATR opzionale
+    atr: Optional[pd.Series] = None
+    if atr_window is not None and atr_window > 0:
+        atr = _compute_atr(data, atr_window)
+
     trades_records = []
 
     in_position = False
     entry_time: Optional[pd.Timestamp] = None
     entry_price: Optional[float] = None
     capital_before_entry: Optional[float] = None
+    entry_stop_price: Optional[float] = None
     hold_days = 0
 
     for i, current_time in enumerate(equity_index):
         price_open = float(data.loc[current_time, "open"])
         price_close = float(data.loc[current_time, "close"])
 
-        # Gestione della posizione aperta
+        # Gestione posizione aperta
         if in_position:
             hold_days += 1
-
             is_last_bar = i == len(equity_index) - 1
-            exit_now = False
 
-            if hold_days >= max_hold_days:
-                exit_now = True
-            if is_last_bar:
-                exit_now = True
+            hit_stop = False
+            stop_exit_price: Optional[float] = None
 
-            if exit_now and entry_time is not None and entry_price is not None and capital_before_entry is not None:
-                # Round-trip commissione: entrata + uscita
-                gross_return = (price_close - entry_price) / entry_price
+            if entry_stop_price is not None:
+                low_price = float(data.loc[current_time, "low"])
+                if low_price <= entry_stop_price:
+                    hit_stop = True
+                    stop_exit_price = entry_stop_price
+
+            time_exit = hold_days >= max_hold_days or is_last_bar
+
+            if (hit_stop or time_exit) and entry_time is not None and entry_price is not None and capital_before_entry is not None:
+                exit_price = stop_exit_price if hit_stop else price_close
+
+                gross_return = (exit_price - entry_price) / entry_price
                 net_return = gross_return - (2 * commission_rate)
                 pnl = capital_before_entry * net_return
                 capital_after = capital_before_entry + pnl
@@ -92,13 +129,15 @@ def run_backtest(
                         "entry_time": entry_time,
                         "exit_time": current_time,
                         "entry_price": entry_price,
-                        "exit_price": price_close,
+                        "exit_price": exit_price,
+                        "stop_price": entry_stop_price,
                         "gross_return": gross_return,
                         "net_return": net_return,
                         "pnl": pnl,
                         "capital_before": capital_before_entry,
                         "capital_after": capital_after,
                         "hold_days": hold_days,
+                        "exit_reason": "stop" if hit_stop else "time_or_last",
                     }
                 )
 
@@ -107,11 +146,11 @@ def run_backtest(
                 entry_time = None
                 entry_price = None
                 capital_before_entry = None
+                entry_stop_price = None
                 hold_days = 0
 
         # Possibile nuova entrata (solo se flat)
         if not in_position and signals.loc[current_time] == 1:
-            # entriamo all'OPEN del giorno successivo, se esiste
             if i < len(equity_index) - 1:
                 next_time = equity_index[i + 1]
                 next_open = float(data.loc[next_time, "open"])
@@ -121,10 +160,16 @@ def run_backtest(
                 in_position = True
                 hold_days = 0
 
+                # Calcolo stop iniziale basato su ATR (se disponibile)
+                entry_stop_price = None
+                if atr is not None and atr_stop_multiple is not None and atr_stop_multiple > 0:
+                    atr_val = float(atr.loc[next_time]) if pd.notna(atr.loc[next_time]) else None
+                    if atr_val is not None:
+                        entry_stop_price = entry_price - atr_stop_multiple * atr_val
+
         equity_values.append(capital)
 
     equity_curve = pd.Series(equity_values, index=equity_index, name="equity")
-
     trades_df = pd.DataFrame(trades_records)
     trades_df = trades_df.sort_values("entry_time") if not trades_df.empty else trades_df
 
@@ -139,7 +184,7 @@ def run_backtest(
         wins = trades_df[trades_df["net_return"] > 0]
         stats["win_rate_pct"] = float(len(wins) / len(trades_df) * 100)
         stats["avg_net_return_pct"] = float(trades_df["net_return"].mean() * 100)
-        # Max drawdown semplice
+
         cummax = equity_curve.cummax()
         drawdown = (equity_curve - cummax) / cummax
         stats["max_drawdown_pct"] = float(drawdown.min() * 100)
@@ -152,7 +197,6 @@ def run_backtest(
 
 
 if __name__ == "__main__":
-    # Mini pipeline completa: dati Kraken -> segnali Strategia 1 -> backtest -> report
     from trading_lab.data import load_btc_daily_csv
     from trading_lab.strategies.btc_trend_daily import BTCTrendDailyParams, generate_signals
     from trading_lab.metrics.report import print_basic_report
@@ -161,5 +205,13 @@ if __name__ == "__main__":
     params = BTCTrendDailyParams()
     signals = generate_signals(df, params)
 
-    result = run_backtest(df, signals, initial_capital=10000.0, commission_rate=0.001, max_hold_days=params.max_hold_days)
+    result = run_backtest(
+        df,
+        signals,
+        initial_capital=10000.0,
+        commission_rate=0.001,
+        max_hold_days=params.max_hold_days,
+        atr_window=params.atr_window,
+        atr_stop_multiple=params.atr_stop_multiple,
+    )
     print_basic_report(result)
