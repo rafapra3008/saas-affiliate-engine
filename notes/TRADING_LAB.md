@@ -202,3 +202,216 @@ Per ogni strategia candidata:
    - probabilmente un trend-following daily long-only con filtro di regime.
 3. Implementare il primo scheletro di codice del Trading Lab in un progetto dedicato (separato dal motore affiliate) o in una sottocartella di questo repo.
 
+
+---
+
+## Piano dati ed exchange (Fase 0–1)
+
+- Exchange target FUTURO per trading reale:
+  - **Kraken**, mercato spot BTC (nessun derivato, nessuna leva).
+  - Motivazioni: exchange regolato, reputazione solida, preparazione IPO, focus su sicurezza.
+
+- Fonte dati storici per il laboratorio (backtest):
+  - **Dati Binance BTCUSDT daily** (candele giornaliere) scaricati come file (CSV/ZIP) via HTTP.
+  - Utilizzo SOLO offline:
+    - i file vengono scaricati una volta,
+    - salvati localmente,
+    - il codice del lab legge solo da disco.
+  - Nessun uso di chiavi API o polling continuo → nessun rischio di block IP per la VM.
+
+- Strategia di coerenza:
+  - Il lab cerca edge sul comportamento generale di BTC usando dati Binance.
+  - Prima di passare a soldi veri su Kraken, la strategia verrà ri-testata su dati Kraken (quando disponibili) per verificare che l’edge non dipenda da dettagli specifici dell’exchange.
+
+
+---
+
+## Strategia 1 – BTC Daily Long-Only (baseline)
+
+Obiettivo: avere una strategia semplice, spiegabile, da usare come baseline di confronto per esperimenti futuri (edge più avanzati).  
+Non è l’obiettivo finale, ma il “controllo”.
+
+### Universo
+
+- Strumento: BTCUSDT (o BTCUSD) spot.
+- Timeframe: candele daily (1D).
+- Operatività: **solo long**, nessuno short, nessuna leva.
+
+### Regole (bozza ad alto livello)
+
+1. **Filtro di regime (trend filter)**
+   - Calcoliamo una media mobile lunga (es. MA 100 o 150 giorni).
+   - Regime “attivo” solo se:
+     - prezzo di chiusura > MA lunga
+     - e volatilità non è eccessiva (es. ATR su N giorni sotto una soglia relativa).
+
+2. **Segnali di ingresso**
+   - Possibili varianti (da testare):
+     - **Breakout di massimo recente**: entra long se il close rompe il massimo degli ultimi M giorni e il filtro di regime è attivo.
+     - oppure **pullback nel trend**: entra long se il prezzo rientra sopra una media media-più-corta dopo un piccolo ritracciamento.
+   - Sempre 1 sola posizione aperta per volta (niente pyramiding in Fase 0–1).
+
+3. **Gestione uscita**
+   - Stop-loss iniziale basato su volatilità (es. multiplo di ATR sotto il prezzo di entrata).
+   - Uscita per:
+     - stop-loss toccato,
+     - stop profit (take profit a X ATR sopra il prezzo d’ingresso),
+     - o stop “di tempo” (es. chiudere dopo N giorni se non si è mosso abbastanza).
+
+4. **Position sizing (in prospettiva reale)**
+   - Risk per trade target: 0.25–0.5% del capitale.
+   - Calcolo della size:
+     - size = (capitale * risk_per_trade) / distanza_stop (in $).
+   - In Fase 0–1 questa logica serve solo per calcolare l’equity simulata.
+
+5. **Costi**
+   - Commissioni realistiche per trade (es. 0.1% per lato).
+   - Nessun slippage estremo (ma possiamo aggiungere un piccolo buffer, es. 0.01–0.05%).
+
+### Cosa vogliamo misurare in backtest
+
+Per questa strategia (e tutte le successive):
+
+- numero di trade,
+- profit/loss totale e per trade,
+- max drawdown,
+- % trade vincenti/perdenti,
+- andamento dell’equity nel tempo (equity curve),
+- performance separata per fasi di mercato (bull, bear, range).
+
+L’edge non si considera “reale” se:
+- dipende da parametri ultra-precisi,
+- collassa appena cambiamo leggermente MA, ATR o soglie.
+
+---
+
+## Struttura del progetto `trading_lab/` (bozza)
+
+Il Trading Lab sarà un mini-progetto Python separato (nuovo repo o sottocartella) con questa struttura logica:
+
+- `trading_lab/`
+  - `__init__.py`
+  - `config.py`  
+    - parametri globali (commissioni, risk per trade, percorsi dati, ecc.).
+  - `data.py`  
+    - funzioni per:
+      - leggere file storici (es. CSV BTCUSDT daily da Binance),
+      - pulire/normalizzare i dati (timezone, colonne, missing).
+  - `strategies/`
+    - `__init__.py`
+    - `btc_trend_daily.py`  
+      - implementazione della Strategia 1:
+        - funzioni tipo `generate_signals(data, params)` → serie di segnali long/flat.
+  - `backtest/`
+    - `__init__.py`
+    - `backtester.py`  
+      - motore di backtest generico:
+        - applica segnali al capitale,
+        - simula entrate/uscite,
+        - calcola PnL per trade, equity curve, drawdown.
+  - `metrics/`
+    - `__init__.py`
+    - `report.py`  
+      - calcolo KPI e produzione di piccoli report testuali (ed eventualmente grafici).
+  - `notebooks/` (opzionale)
+    - Jupyter notebook per esplorare dati, parametri, risultati.
+
+In Fase 0–1:
+- useremo solo i dati storici locali,
+- nessuna chiamata API live,
+- nessuna integrazione con exchange reale.
+
+
+---
+
+## Strategia 1 – BTC Daily Long-Only (baseline)
+
+Obiettivo: avere una strategia semplice, spiegabile, da usare come baseline di confronto per esperimenti futuri (edge più avanzati).  
+Non è l’obiettivo finale, ma il “controllo”.
+
+### Universo
+
+- Strumento: BTCUSDT (o BTCUSD) spot.
+- Timeframe: candele daily (1D).
+- Operatività: **solo long**, nessuno short, nessuna leva.
+
+### Regole (bozza ad alto livello)
+
+1. **Filtro di regime (trend filter)**
+   - Calcoliamo una media mobile lunga (es. MA 100 o 150 giorni).
+   - Regime “attivo” solo se:
+     - prezzo di chiusura > MA lunga
+     - e la volatilità non è eccessiva (es. ATR su N giorni sotto una soglia relativa).
+
+2. **Segnali di ingresso**
+   - Possibili varianti (da testare):
+     - **Breakout di massimo recente**: entra long se il close rompe il massimo degli ultimi M giorni e il filtro di regime è attivo.
+     - oppure **pullback nel trend**: entra long se il prezzo rientra sopra una media più corta dopo un piccolo ritracciamento.
+   - Sempre 1 sola posizione aperta per volta (niente pyramiding in Fase 0–1).
+
+3. **Gestione uscita**
+   - Stop-loss iniziale basato su volatilità (es. multiplo di ATR sotto il prezzo di entrata).
+   - Uscita per:
+     - stop-loss toccato,
+     - take profit (multiplo ATR sopra l’ingresso),
+     - oppure stop “di tempo” (chiudere dopo N giorni se non si muove abbastanza).
+
+4. **Position sizing (per il futuro reale)**
+   - Rischio per trade target: 0.25–0.5% del capitale.
+   - Size = (capitale * risk_per_trade) / distanza_stop ($).
+   - In Fase 0–1 serve solo per simulare l’equity curve.
+
+5. **Costi**
+   - Commissioni realistiche per trade (es. 0.1% per lato).
+   - Eventuale piccolo slippage aggiuntivo (es. 0.01–0.05%).
+
+### Cosa vogliamo misurare in backtest
+
+- numero di trade,
+- profit/loss totale e per trade,
+- max drawdown,
+- % trade vincenti/perdenti,
+- equity curve nel tempo,
+- performance per fasi di mercato (bull, bear, range).
+
+Un edge non è accettato se:
+- funziona solo con parametri ultra-precisi,
+- collassa appena cambiamo leggermente MA, ATR o soglie.
+
+---
+
+## Struttura del progetto `trading_lab/` (bozza)
+
+Il Trading Lab sarà un mini-progetto Python (nuovo repo o sottocartella) con struttura logica:
+
+- `trading_lab/`
+  - `__init__.py`
+  - `config.py`  
+    - parametri globali: commissioni, risk per trade, percorsi dati, ecc.
+  - `data.py`  
+    - lettura file storici (es. CSV BTCUSDT daily da Binance),
+    - pulizia/normalizzazione dati.
+  - `strategies/`
+    - `__init__.py`
+    - `btc_trend_daily.py`  
+      - implementazione Strategia 1:
+        - `generate_signals(data, params)` → segnali long/flat.
+  - `backtest/`
+    - `__init__.py`
+    - `backtester.py`  
+      - motore di backtest generico:
+        - applica segnali,
+        - simula entrate/uscite,
+        - calcola PnL, equity curve, drawdown.
+  - `metrics/`
+    - `__init__.py`
+    - `report.py`  
+      - calcolo KPI e produzione di report testuali/grafici.
+  - `notebooks/` (opzionale)
+    - notebook per esplorare dati, parametri, risultati.
+
+In Fase 0–1:
+- uso SOLO dati storici locali (Binance BTCUSDT daily),
+- nessuna chiamata API live,
+- nessuna operazione reale sugli exchange.
+
