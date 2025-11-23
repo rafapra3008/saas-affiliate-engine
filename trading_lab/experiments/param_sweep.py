@@ -1,23 +1,21 @@
 """
 Param sweep semplice per Strategia 1 – BTC Daily Long-Only.
 
-Obiettivo:
-- variare alcuni parametri chiave
-- confrontare rendimento totale, max drawdown, n. trade
-- NON fare overfitting, solo capire se ci sono zone di parametri "sensate".
+Usa il loader principale load_btc_daily(), che preferisce
+il CSV esterno multi-anno se disponibile.
 """
 
 from itertools import product
 
 import pandas as pd
 
-from trading_lab.data import load_btc_daily_csv
+from trading_lab.data import load_btc_daily
 from trading_lab.strategies.btc_trend_daily import BTCTrendDailyParams, generate_signals
 from trading_lab.backtest.backtester import run_backtest
 
 
 def run_param_sweep() -> pd.DataFrame:
-    df = load_btc_daily_csv()
+    df = load_btc_daily()
 
     ma_long_values = [100, 150, 200]
     breakout_values = [20, 40]
@@ -62,7 +60,6 @@ def run_param_sweep() -> pd.DataFrame:
         )
 
     df_res = pd.DataFrame(rows)
-    # rapporto rendimento / drawdown (assoluto) come metrica grezza di qualità
     df_res["return_over_dd"] = df_res["total_return_pct"] / df_res["max_drawdown_pct"].abs()
 
     return df_res
@@ -76,18 +73,28 @@ def main() -> None:
     print(
         df_res.sort_values("total_return_pct", ascending=False)
         .head(10)
-        .to_string(index=False, formatters={"total_return_pct": "{:.2f}".format,
-                                            "max_drawdown_pct": "{:.2f}".format,
-                                            "return_over_dd": "{:.3f}".format})
+        .to_string(
+            index=False,
+            formatters={
+                "total_return_pct": "{:.2f}".format,
+                "max_drawdown_pct": "{:.2f}".format,
+                "return_over_dd": "{:.3f}".format,
+            },
+        )
     )
 
     print("\nTop 10 per rapporto rendimento / drawdown:")
     print(
         df_res.sort_values("return_over_dd", ascending=False)
         .head(10)
-        .to_string(index=False, formatters={"total_return_pct": "{:.2f}".format,
-                                            "max_drawdown_pct": "{:.2f}".format,
-                                            "return_over_dd": "{:.3f}".format})
+        .to_string(
+            index=False,
+            formatters={
+                "total_return_pct": "{:.2f}".format,
+                "max_drawdown_pct": "{:.2f}".format,
+                "return_over_dd": "{:.3f}".format,
+            },
+        )
     )
 
 

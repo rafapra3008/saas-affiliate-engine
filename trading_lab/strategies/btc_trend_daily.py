@@ -14,7 +14,7 @@ from typing import Any, Dict
 
 import pandas as pd
 
-from ..data import load_btc_daily_csv
+from ..data import load_btc_daily
 
 
 @dataclass
@@ -70,8 +70,8 @@ def generate_signals(data: pd.DataFrame, params: BTCTrendDailyParams | Dict[str,
 
 
 if __name__ == "__main__":
-    # Mini test manuale: carica dati da Kraken, calcola segnali, stampa riassunto
-    df = load_btc_daily_csv()
+    # Mini test manuale: carica dati (preferibilmente dal CSV esterno), calcola segnali, stampa riassunto
+    df = load_btc_daily()
     print(df.tail())
 
     params = BTCTrendDailyParams()
